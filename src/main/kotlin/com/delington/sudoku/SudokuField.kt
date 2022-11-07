@@ -1,5 +1,7 @@
 package com.delington.sudoku
 
+import kotlin.math.sqrt
+
 
 class SudokuField {
 
@@ -10,23 +12,39 @@ class SudokuField {
     fun SudokuField() {
     }
 
-    fun generateDiagonalBlocks() {
-        for (i in 0 until SIZE) {
-            for (j in 0 until SIZE) {
-                randomizeDiagonalBLock(0..2, 0..2)
-                randomizeDiagonalBLock(3..5, 3..5)
-                randomizeDiagonalBLock(6..8, 6..8)
-            }
+    // Sudoku Generator
+    fun fillValues() {
+        // Fill the diagonal blocks
+        fillDiagonalBlocks()
+
+        // Fill remaining blocks
+        fillRemaining(0, BLOCK_SIZE)
+
+        // Remove Randomly K digits to make game
+        removeKDigits()
+    }
+
+    private fun fillRemaining(i: Int, srn: Any) {
+        //TODO
+    }
+
+    private fun removeKDigits() {
+        //TODO("Not yet implemented")
+    }
+
+    fun fillDiagonalBlocks() {
+        for (i in 0..6 step 3) {
+            randomizeDiagonalBlock(i)
         }
     }
 
-    private fun randomizeDiagonalBLock(columnIndexes: IntRange, rowIndexes: IntRange) {
+    private fun randomizeDiagonalBlock(index: Int) {
         val simpleSet = SET_OF_SUDOKU_NUMBERS.toMutableSet()
 
-        for (i in rowIndexes) {
-            for (j in rowIndexes) {
+        for (i in 0 until BLOCK_SIZE) {
+            for (j in 0 until BLOCK_SIZE) {
                 val setElement: Int = simpleSet.random()
-                field[i][j] = setElement
+                field[i + index][j + index] = setElement
                 simpleSet.remove(setElement)
             }
         }
@@ -64,6 +82,7 @@ class SudokuField {
 
     companion object {
         const val SIZE = 9
+        val BLOCK_SIZE = sqrt(SIZE.toDouble()).toInt()
         val SET_OF_SUDOKU_NUMBERS = generateSequence(1) { it + 1 }.take(9)
     }
 }
