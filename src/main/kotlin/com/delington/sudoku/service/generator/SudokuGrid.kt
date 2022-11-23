@@ -1,13 +1,19 @@
-package com.delington.sudoku
+package com.delington.sudoku.service.generator
 
+import com.delington.sudoku.constants.SET_OF_SUDOKU_NUMBERS
+import com.delington.sudoku.constants.SUDOKU_MAX_NUMBER
+import com.delington.sudoku.constants.SUDOKU_SIZE
+import com.delington.sudoku.service.dealer.Dealer
+import com.delington.sudoku.service.printer.SudokuPrinter
+import com.delington.sudoku.service.validator.Validator
 import kotlin.random.Random
-
-fun MutableList<BooleanArray>.copy() = Array(size) { get(it).clone() }
 
 fun MutableList<MutableList<Int>>.copy() = map { it.toMutableList() }.toMutableList()
 
 class SudokuGrid(
-    private var field: MutableList<MutableList<Int>>
+    private var field: MutableList<MutableList<Int>>,
+    private val dealer: Dealer,
+    private val printer: SudokuPrinter
 ) {
 
     fun assignRandomNumbers() {
@@ -26,19 +32,19 @@ class SudokuGrid(
     }
 
     fun generate() {
-        assignRandomNumbers()
-        printToConsole()
+        dealer.dealRandomNumbers(field)
+        printer.printToConsole(field)
         val result = solve(field, Pair(0, 0), -1)
     }
 
-    fun solve(field: MutableList<MutableList<Int>>, currentEmptyCell: Pair<Int, Int>?, value: Int): Boolean {
+    fun solve(startField: MutableList<MutableList<Int>>, currentEmptyCell: Pair<Int, Int>?, value: Int): Boolean {
         // There are no more cell to fill
         if (currentEmptyCell == null) {
-            this.field = field
-            printToConsole()
+            field = startField
+            printer.printToConsole(field)
             return true
         }
-        val copyField = field.copy()
+        val copyField = startField.copy()
 
         // If it's not the root call of this function
         if (value != -1) {
@@ -76,42 +82,5 @@ class SudokuGrid(
             }
         }
         return null
-    }
-
-    fun printToConsole() {
-        for (i in 0 until SUDOKU_SIZE) {
-            printBlockSeparatorRowPart(i)
-
-            for (j in 0 until SUDOKU_SIZE) {
-                printBlockSeparatorColumnPart(j)
-                printElement(field[i][j])
-            }
-            println()
-        }
-    }
-
-    private fun printBlockSeparatorColumnPart(j: Int) {
-        if (j % 3 == 0) {
-            print("  ")
-        }
-    }
-
-    private fun printBlockSeparatorRowPart(i: Int) {
-        if (i % 3 == 0) {
-            println()
-        }
-    }
-
-    private fun printElement(element: Int) = if (element == 0) {
-        print(".  ")
-    } else {
-        print("$element  ")
-    }
-
-    companion object {
-        const val SUDOKU_SIZE = 9
-        const val BLOCK_SIZE = 3
-        const val SUDOKU_MAX_NUMBER = 9
-        val SET_OF_SUDOKU_NUMBERS = generateSequence(1) { it + 1 }.take(9)
     }
 }

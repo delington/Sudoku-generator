@@ -1,5 +1,9 @@
 package com.delington.sudoku
 
+import com.delington.sudoku.constants.SUDOKU_SIZE
+import com.delington.sudoku.service.dealer.FewNumberDealer
+import com.delington.sudoku.service.generator.SudokuGrid
+import com.delington.sudoku.service.printer.SudokuPrinter
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -7,13 +11,14 @@ internal class SudokuGridTest {
 
     @Test
     fun assignRandomNumbers() {
-        val field = MutableList(Sudoku.SIZE) {
-            MutableList(Sudoku.SIZE) { 0 }
+        val field = MutableList(SUDOKU_SIZE) {
+            MutableList(SUDOKU_SIZE) { 0 }
         }
 
-        val sudokuGrid = SudokuGrid(field)
+        val printer = SudokuPrinter()
+        val sudokuGrid = SudokuGrid(field, FewNumberDealer(), printer)
         sudokuGrid.assignRandomNumbers()
-        sudokuGrid.printToConsole()
+        printer.printToConsole(field)
         checkAllNumbers(field)
     }
 

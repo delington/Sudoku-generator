@@ -1,9 +1,7 @@
 package com.delington.sudoku
 
+import com.delington.sudoku.service.validator.Validator
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -11,17 +9,6 @@ import java.util.stream.Stream
 
 
 internal class ValidatorTest {
-
-    @Test
-    fun isValidByRow() {
-        val field = mutableListOf(
-            mutableListOf(1, 2, 3),
-            mutableListOf(4, 5, 6),
-            mutableListOf(7, 0, 9)
-        )
-        assertFalse(Validator.isValidByRow(field, 0, 3))
-        assertTrue(Validator.isValidByRow(field, 2, 8))
-    }
 
     @ParameterizedTest
     @MethodSource("provideMatrixesForRowCheck")
@@ -39,30 +26,6 @@ internal class ValidatorTest {
     @MethodSource("provideMatrixesForBlockCheck")
     fun shouldBeValidByBlocks(field: MutableList<MutableList<Int>>, expectedBoolean: Boolean) {
         assertEquals(expectedBoolean, Validator.isValidByBlocks(field))
-    }
-
-    @Test
-    fun isValidByColumn() {
-        val field = mutableListOf(
-            mutableListOf(1, 2, 3),
-            mutableListOf(4, 5, 6),
-            mutableListOf(7, 8, 9)
-        )
-        assertFalse(Validator.isValidByColumn(field, 0, 4))
-        assertTrue(Validator.isValidByColumn(field, 2, 7))
-    }
-
-    @Test
-    fun isValidByBlock() {
-        val field = mutableListOf(
-            mutableListOf(1, 2, 3),
-            mutableListOf(4, 5, 6),
-            mutableListOf(7, 0, 9)
-        )
-        assertFalse(Validator.isValidByBlock(field, 1, 1, 5))
-        assertFalse(Validator.isValidByBlock(field, 2, 1, 5))
-        assertTrue(Validator.isValidByBlock(field, 0, 1, 8))
-        assertTrue(Validator.isValidByBlock(field, 2, 1, 8))
     }
 
     companion object {
