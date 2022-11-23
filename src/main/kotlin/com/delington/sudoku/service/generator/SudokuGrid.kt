@@ -1,12 +1,10 @@
 package com.delington.sudoku.service.generator
 
-import com.delington.sudoku.constants.SET_OF_SUDOKU_NUMBERS
 import com.delington.sudoku.constants.SUDOKU_MAX_NUMBER
 import com.delington.sudoku.constants.SUDOKU_SIZE
 import com.delington.sudoku.service.dealer.Dealer
 import com.delington.sudoku.service.printer.SudokuPrinter
 import com.delington.sudoku.service.validator.Validator
-import kotlin.random.Random
 
 fun MutableList<MutableList<Int>>.copy() = map { it.toMutableList() }.toMutableList()
 
@@ -16,32 +14,17 @@ class SudokuGrid(
     private val printer: SudokuPrinter
 ) {
 
-    fun assignRandomNumbers() {
-        val simpleSet = SET_OF_SUDOKU_NUMBERS.toMutableSet()
-
-        while (simpleSet.isNotEmpty()) {
-            val randomRow = Random.nextInt(0, SUDOKU_MAX_NUMBER)
-            val randomColumn = Random.nextInt(0, SUDOKU_MAX_NUMBER)
-
-            if (field[randomRow][randomColumn] == 0) {
-                val randomNumber = simpleSet.random()
-                field[randomRow][randomColumn] = randomNumber
-                simpleSet.remove(randomNumber)
-            }
-        }
-    }
-
     fun generate() {
         dealer.dealRandomNumbers(field)
         printer.printToConsole(field)
-        val result = solve(field, Pair(0, 0), -1)
+        solve(field, Pair(0, 0), -1)
+        printer.printToConsole(field)
     }
 
-    fun solve(startField: MutableList<MutableList<Int>>, currentEmptyCell: Pair<Int, Int>?, value: Int): Boolean {
+    private fun solve(startField: MutableList<MutableList<Int>>, currentEmptyCell: Pair<Int, Int>?, value: Int): Boolean {
         // There are no more cell to fill
         if (currentEmptyCell == null) {
             field = startField
-            printer.printToConsole(field)
             return true
         }
         val copyField = startField.copy()

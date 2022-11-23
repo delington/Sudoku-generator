@@ -4,7 +4,7 @@ import com.delington.sudoku.constants.BLOCK_SIZE
 import com.delington.sudoku.constants.SET_OF_SUDOKU_NUMBERS
 import com.delington.sudoku.constants.SUDOKU_SIZE
 
-class OrtogonalMatrixDealer : Dealer {
+class OrthogonalMatrixDealer : Dealer {
 
     override fun dealRandomNumbers(field: MutableList<MutableList<Int>>) {
         for (i in 0..SUDOKU_SIZE - BLOCK_SIZE step 3) {
