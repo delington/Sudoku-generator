@@ -14,7 +14,7 @@ fun main() {
     val sudoku = SudokuGrid(
         field,
         OrthogonalMatrixDealer(),
-        FewNumbersRemover(10),
+        FewNumbersRemover(20),
         SudokuPrinter()
     )
 

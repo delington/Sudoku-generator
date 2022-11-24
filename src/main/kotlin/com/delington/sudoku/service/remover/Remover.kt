@@ -16,12 +16,25 @@ class FewNumbersRemover(
     override fun removeNumbers(field: MutableList<MutableList<Int>>) {
         val setOfCoords = mutableSetOf<Pair<Int, Int>>()
 
-        for (i in 0..removableNumbersCount) {
-            val randomCoords = getRandomIndexes()
-            setOfCoords.add(randomCoords)
+        for (i in 0 until removableNumbersCount) {
+            var randomCoords = getRandomIndexes()
 
+            // Avoid duplicate random coordinates
+            while (isDuplicate(randomCoords, setOfCoords)) {
+                randomCoords = getRandomIndexes()
+            }
+            setOfCoords.add(randomCoords)
             field[randomCoords.first][randomCoords.second] = 0
         }
+    }
+
+    private fun isDuplicate(randomCoords: Pair<Int, Int>, setOfCoords: MutableSet<Pair<Int, Int>>): Boolean {
+        setOfCoords.forEach {
+            if (randomCoords.first == it.first && randomCoords.second == it.second) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun getRandomIndexes(): Pair<Int, Int> {
