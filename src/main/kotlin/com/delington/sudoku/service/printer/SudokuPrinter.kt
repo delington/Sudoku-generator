@@ -5,6 +5,7 @@ import com.delington.sudoku.constants.SUDOKU_SIZE
 class SudokuPrinter {
 
     fun printToConsole(field: MutableList<MutableList<Int>>) {
+        println("----------------------------------")
         for (i in 0 until SUDOKU_SIZE) {
             printBlockSeparatorRowPart(i)
 

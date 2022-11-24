@@ -4,6 +4,7 @@ import com.delington.sudoku.constants.SUDOKU_MAX_NUMBER
 import com.delington.sudoku.constants.SUDOKU_SIZE
 import com.delington.sudoku.service.dealer.Dealer
 import com.delington.sudoku.service.printer.SudokuPrinter
+import com.delington.sudoku.service.remover.Remover
 import com.delington.sudoku.service.validator.Validator
 
 fun MutableList<MutableList<Int>>.copy() = map { it.toMutableList() }.toMutableList()
@@ -11,13 +12,18 @@ fun MutableList<MutableList<Int>>.copy() = map { it.toMutableList() }.toMutableL
 class SudokuGrid(
     private var field: MutableList<MutableList<Int>>,
     private val dealer: Dealer,
+    private val remover: Remover,
     private val printer: SudokuPrinter
 ) {
 
     fun generate() {
         dealer.dealRandomNumbers(field)
         printer.printToConsole(field)
+
         solve(field, Pair(0, 0), -1)
+        printer.printToConsole(field)
+
+        remover.removeNumbers(field)
         printer.printToConsole(field)
     }
 
